@@ -40,4 +40,4 @@ ai-air-quality-safe-route-system/
     ├── main.py             # Core API endpoints and logic
     ├── ecopath.db          # SQLite database
     ├── requirements.txt    # Python dependencies
-    └── .env                # Environment variables (secrets)
+    └── .env                # Environment variables (secrets)  
