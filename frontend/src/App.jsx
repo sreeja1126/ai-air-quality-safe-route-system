@@ -1,10 +1,9 @@
-import AuthPage from './components/AuthPage';
 import MapRouter from './components/MapRouter';
 import MLSimulator from './components/MLSimulator';
 import { getRealtimeAQI } from './services/api';
 import React, { useState, useEffect } from 'react';
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
-import { Wind, Baby, Users, HeartPulse, PersonStanding, LogOut, Sun, Moon } from 'lucide-react';
+import { BarChart, Bar, Tooltip, ResponsiveContainer, Cell } from 'recharts';
+import { Wind, Baby, Users, HeartPulse, PersonStanding, Sun, Moon } from 'lucide-react';
 
 // --- ADVANCED HEALTH LOGIC ---
 const getAqiStyles = (aqi) => {
@@ -49,9 +48,6 @@ const DemographicCard = ({ icon: Icon, title, risk }) => (
 export default function App() {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState(null);
-  
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [userName, setUserName] = useState('');
   const [isDarkMode, setIsDarkMode] = useState(true);
 
   useEffect(() => {
@@ -61,34 +57,6 @@ export default function App() {
       document.documentElement.classList.remove('dark');
     }
   }, [isDarkMode]);
-
-  useEffect(() => {
-    const savedToken = localStorage.getItem('ecopath_token');
-    const savedName = localStorage.getItem('ecopath_name');
-    if (savedToken && savedName) {
-      setIsAuthenticated(true);
-      setUserName(savedName);
-    }
-  }, []);
-
-  const handleLoginSuccess = (name, token) => {
-    localStorage.setItem('ecopath_token', token);
-    localStorage.setItem('ecopath_name', name);
-    setIsAuthenticated(true);
-    setUserName(name);
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem('ecopath_token');
-    localStorage.removeItem('ecopath_name');
-    setIsAuthenticated(false);
-    setUserName('');
-    setData(null);
-  };
-
-  if (!isAuthenticated) {
-    return <AuthPage onLogin={handleLoginSuccess} />;
-  }
 
   const handleSearch = async (searchCity) => {
     if (!searchCity) return;
@@ -150,7 +118,6 @@ export default function App() {
             </div>
 
             <div className="flex items-center gap-4 border-l border-slate-300 dark:border-slate-600 pl-6 transition-colors">
-              <span className="text-sm font-bold text-slate-600 dark:text-slate-300 hidden sm:block">Welcome, {userName}</span>
               
               <button
                 onClick={() => setIsDarkMode(!isDarkMode)}
@@ -160,13 +127,6 @@ export default function App() {
                 {isDarkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
               </button>
 
-              <button 
-                onClick={handleLogout}
-                className="p-2 bg-rose-100 dark:bg-rose-500/20 text-rose-600 dark:text-rose-400 rounded-full hover:bg-rose-200 dark:hover:bg-rose-500/40 transition-colors"
-                title="Sign Out"
-              >
-                <LogOut className="w-4 h-4" />
-              </button>
             </div>
           </div>
         </header>
